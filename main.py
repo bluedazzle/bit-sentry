@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import tornado.web
 import os
 
-from tasks import check_eth_eos
+from tasks import check_eth_eos, check_cls_news
 
 
 class Application(tornado.web.Application):
@@ -30,5 +30,5 @@ class IndexHandle(tornado.web.RequestHandler):
 
 app = Application()
 app.listen(8800)
-tornado.ioloop.PeriodicCallback(check_eth_eos, 1000 * 5).start()
+tornado.ioloop.PeriodicCallback(check_cls_news, 1000 * 5).start()
 tornado.ioloop.IOLoop.current().start()

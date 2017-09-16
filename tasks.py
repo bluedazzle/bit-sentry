@@ -6,6 +6,7 @@ import datetime
 import pytz
 
 from bter import *
+from cailianshe import get_lastest_news
 from notify import send_msg_to_wechat
 
 
@@ -24,3 +25,7 @@ def check_eth_eos():
     print msg
     send_msg_to_wechat(msg)
     return True, msg
+
+
+def check_cls_news():
+    get_lastest_news(1505554494)
