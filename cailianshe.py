@@ -32,9 +32,9 @@ def get_lastest_news(the_cursor):
         no_new = data.get('errno', None)
         if no_new == 20022:
             return False
-        next_curosr = data.get('previous_cursor')
+        next_cursor = data.get('previous_cursor')
         news_data = data.get('data')
-        redis_1.set('cls_cursor', next_curosr)
+        redis_1.set('cls_cursor', next_cursor)
         for itm in news_data:
             title = itm.get('content', '')
             if filter_by_keywords(title):
@@ -42,14 +42,16 @@ def get_lastest_news(the_cursor):
                 news.link = 'http://www.cailianpress.com/'
                 news.title = title
                 news.source = 1
-                news.sid = next_curosr
+                news.sid = next_cursor
                 news.hash = md5(title.encode('utf-8'))
                 session.add(news)
                 send_msg_to_wechat(title, '资讯 {0:%Y-%m-%d %H:%M:%S}'.format(datetime.now()))
         try:
             session.commit()
+            session.close()
         except Exception as e:
             logging.exception('ERROR in commit data to database reason {0}'.format(e))
+            session.rollback()
     except Exception as e:
         logging.exception('ERROR in get news from cailianshe cursor {0} reason {1}'.format(e, cursor))
         return False
