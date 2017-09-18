@@ -32,8 +32,8 @@ def get_lastest_news(the_cursor):
         no_new = data.get('errno', None)
         if no_new == 20022:
             return False
-        next_cursor = data.get('previous_cursor')
         news_data = data.get('data')
+        next_cursor = news_data[0].get('sort_score')
         redis_1.set('cls_cursor', next_cursor)
         for itm in news_data:
             title = itm.get('content', '')
